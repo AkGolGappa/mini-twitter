@@ -147,7 +147,7 @@ public class TweetServiceImpl implements TweetService {
             throw new PersistenceException(ApplicationConstants.FAILED, ApplicationConstants.TWEET_ERROR_ID);
         }
         log.info("Ending post tweet method");
-        response.setGenericResponse(ApplicationConstants.SUCCESS);
+        response.setGenericResponse(ApplicationConstants.FAILED);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

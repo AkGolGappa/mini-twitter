@@ -52,7 +52,7 @@ public class TweetServiceImplTest {
         tweetReq.setTweet("test-tweet");
         Mockito.when(userRepository.findByEmailId("ayush@gmail.com")).thenReturn(Optional.of(new User()));
         Assertions.assertEquals(ApplicationConstants.SUCCESS,
-                tweetService.postTweet("ayush@gmail.com", tweetReq).getBody());
+                tweetService.postTweet("ayush@gmail.com", tweetReq).getBody().getGenericResponse());
     }
 
     @Test
@@ -63,7 +63,7 @@ public class TweetServiceImplTest {
         tweetReq.setTweet("test-tweet");
         Mockito.when(userRepository.findByEmailId("ayush@gmail.com")).thenReturn(Optional.empty());
         Assertions.assertEquals(ApplicationConstants.FAILED,
-                tweetService.postTweet("ayush@gmail.com", tweetReq).getBody());
+                tweetService.postTweet("ayush@gmail.com", tweetReq).getBody().getGenericResponse());
     }
 
     @Test
