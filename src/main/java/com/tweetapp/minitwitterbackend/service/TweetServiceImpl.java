@@ -43,20 +43,23 @@ public class TweetServiceImpl implements TweetService {
 
 
     @Override
-    public ResponseEntity<String> deleteTweet(final String userName, final int tweetId) throws PersistenceException {
+    public ResponseEntity<GenericResponse> deleteTweet(final String userName, final int tweetId) throws PersistenceException {
         log.info("Starting Delete tweet method");
+        GenericResponse response = new GenericResponse();
         try {
             if (validUser(userName) && validTweet(tweetId)) {
                 tweetRepository.deleteById(tweetId);
                 //producer.sendMessage("Tweet Deleted with the following tweetId" + tweetId);
                 log.info("Ending Delete tweet method");
-                return new ResponseEntity<>(ApplicationConstants.TWEET_DELETED, HttpStatus.OK);
+                response.setGenericResponse(ApplicationConstants.TWEET_DELETED);
+                return new ResponseEntity<>(response, HttpStatus.OK);
             }
         } catch (Exception e) {
             throw new PersistenceException(ApplicationConstants.FAILED, ApplicationConstants.TWEET_ERROR_ID);
         }
         log.info("Ending Delete tweet method");
-        return new ResponseEntity<>(ApplicationConstants.FAILED, HttpStatus.OK);
+        response.setGenericResponse(ApplicationConstants.FAILED);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @Override

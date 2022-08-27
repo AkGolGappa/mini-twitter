@@ -127,14 +127,14 @@ public class TweetServiceImplTest {
         Mockito.when(tweetRepository.findById(1)).thenReturn(Optional.of(new Tweet()));
         Mockito.when(userRepository.findByEmailId("ayush@gmail.com")).thenReturn(Optional.of(new User()));
         Assertions.assertEquals(ApplicationConstants.TWEET_DELETED,
-                tweetService.deleteTweet("ayush@gmail.com", 1).getBody());
+                tweetService.deleteTweet("ayush@gmail.com", 1).getBody().getGenericResponse());
     }
 
     @Test
     void deleteTweetFailed() throws PersistenceException {
         Mockito.when(tweetRepository.findById(1)).thenReturn(Optional.empty());
         Mockito.when(userRepository.findByEmailId("ayush@gmail.com")).thenReturn(Optional.of(new User()));
-        Assertions.assertEquals(ApplicationConstants.FAILED, tweetService.deleteTweet("ayush@gmail.com", 1).getBody());
+        Assertions.assertEquals(ApplicationConstants.FAILED, tweetService.deleteTweet("ayush@gmail.com", 1).getBody().getGenericResponse());
     }
 
     @Test

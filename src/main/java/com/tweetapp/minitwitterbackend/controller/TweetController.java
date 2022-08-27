@@ -57,7 +57,7 @@ public class TweetController {
 	}
 
 	@DeleteMapping("/{userName}/delete/{tweetId}")
-	public ResponseEntity<String> deleteTweet(@PathVariable("userName") String userName,
+	public ResponseEntity<GenericResponse> deleteTweet(@PathVariable("userName") String userName,
 			@PathVariable("tweetId") int tweetId) throws PersistenceException {
 		return tweetService.deleteTweet(userName, tweetId);
 	}

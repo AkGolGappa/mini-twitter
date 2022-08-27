@@ -20,7 +20,7 @@ public interface TweetService {
 
     ResponseEntity<String> likeTweet(String userName, int tweetId) throws PersistenceException;
 
-    ResponseEntity<String> deleteTweet(String userName, int tweetId) throws PersistenceException;
+    ResponseEntity<GenericResponse> deleteTweet(String userName, int tweetId) throws PersistenceException;
 
     ResponseEntity<String> reply(String userName, int tweetId, String reply) throws PersistenceException;
 
