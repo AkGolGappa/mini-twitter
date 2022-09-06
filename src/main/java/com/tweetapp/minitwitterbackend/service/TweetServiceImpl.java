@@ -2,6 +2,8 @@ package com.tweetapp.minitwitterbackend.service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -68,6 +70,11 @@ public class TweetServiceImpl implements TweetService {
         try {
             List<Tweet> tweetList = tweetRepository.findAll();
             if (tweetList != null) {
+                Collections.sort(tweetList, new Comparator<Tweet>() {
+                    public int compare(Tweet t1, Tweet t2) {
+                        return t2.getCreated().compareTo(t1.getCreated());
+                    }
+                });
                 log.info("Ending getAll tweet method");
                 return new ResponseEntity<>(tweetList, HttpStatus.OK);
             }
@@ -86,6 +93,11 @@ public class TweetServiceImpl implements TweetService {
                 final List<Tweet> tweetListByUser = tweetRepository.findByUserName(userName);
                 if (tweetListByUser != null) {
                     log.info("Ending getAll tweet by user method");
+                    Collections.sort(tweetListByUser, new Comparator<Tweet>() {
+                        public int compare(Tweet t1, Tweet t2) {
+                            return t2.getCreated().compareTo(t1.getCreated());
+                        } 
+                    });
                     return new ResponseEntity<>(tweetListByUser, HttpStatus.OK);
                 }
             }
@@ -137,14 +149,27 @@ public class TweetServiceImpl implements TweetService {
         GenericResponse response = new GenericResponse();
         try {
             if (validUser(userName) && request != null) {
-                long idCount = tweetRepository.count();
-                final Tweet tweet = new Tweet(((int) idCount + 1), request.getUserName(), request.getTweet(),
-                        new Date(System.currentTimeMillis()), new HashMap<String, Integer>(), null);
-                tweetRepository.save(tweet);
-                //producer.sendMessage("Tweet Added with the following tweetId" + tweet.getTweetId());
-                log.info("Ending post tweet method");
-                response.setGenericResponse(ApplicationConstants.SUCCESS);
-                return new ResponseEntity<>(response, HttpStatus.OK);
+                List<Tweet> tweetList = tweetRepository.findAll();
+                if (tweetList != null && tweetList.size() >= 0) {
+                    Collections.sort(tweetList, new Comparator<Tweet>() {
+                        public int compare(Tweet t1, Tweet t2) {
+                            return t2.getCreated().compareTo(t1.getCreated());
+                        }
+                    });
+                    long idCount = 1;
+                    if (tweetList.size() > 0) {
+                        idCount = tweetList.get(0).getTweetId() + 1;
+                    }
+                    final Tweet tweet = new Tweet(((int) idCount), request.getUserName(),
+                            request.getTweet(),
+                            new Date(System.currentTimeMillis()), new HashMap<String, Integer>(), null);
+                    tweetRepository.save(tweet);
+                    // producer.sendMessage("Tweet Added with the following tweetId" +
+                    // tweet.getTweetId());
+                    log.info("Ending post tweet method");
+                    response.setGenericResponse(ApplicationConstants.SUCCESS);
+                    return new ResponseEntity<>(response, HttpStatus.OK);
+                }
             }
         } catch (Exception e) {
             throw new PersistenceException(ApplicationConstants.FAILED, ApplicationConstants.TWEET_ERROR_ID);

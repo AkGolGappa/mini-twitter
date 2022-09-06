@@ -3,6 +3,7 @@ package com.tweetapp.minitwitterbackend.service;
 import static org.mockito.ArgumentMatchers.any;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,6 +51,9 @@ public class TweetServiceImplTest {
         tweetReq.setUserName("ayush@gmail.com");
         tweetReq.setTweetId(1);
         tweetReq.setTweet("test-tweet");
+        List<Tweet> tweetList = Arrays.asList(new Tweet(1, "Hello", "ayush@gmail.com", new Date(), null, null),
+                new Tweet(2, "ayush@gmail.com", "test-tweet", new Date(), null, null));
+        Mockito.when(tweetRepository.findAll()).thenReturn(tweetList);
         Mockito.when(userRepository.findByEmailId("ayush@gmail.com")).thenReturn(Optional.of(new User()));
         Assertions.assertEquals(ApplicationConstants.SUCCESS,
                 tweetService.postTweet("ayush@gmail.com", tweetReq).getBody().getGenericResponse());
@@ -68,8 +72,8 @@ public class TweetServiceImplTest {
 
     @Test
     void getAllTweets() throws PersistenceException {
-        List<Tweet> tweetList = Arrays.asList(new Tweet(1, "Hello", "ayush@gmail.com", null, null, null),
-                new Tweet(2, "ayush@gmail.com", "test-tweet", null, null, null));
+        List<Tweet> tweetList = Arrays.asList(new Tweet(1, "Hello", "ayush@gmail.com", new Date(), null, null),
+                new Tweet(2, "ayush@gmail.com", "test-tweet", new Date(), null, null));
         Mockito.when(tweetRepository.findAll()).thenReturn(tweetList);
         Assertions.assertEquals(2, tweetService.getAllTweets().getBody().size());
     }
@@ -84,8 +88,8 @@ public class TweetServiceImplTest {
     void getAllTweetByUser() throws PersistenceException {
         Mockito.when(userRepository.findByEmailId("ayush@gmail.com")).thenReturn(Optional.of(new User()));
         Mockito.when(tweetRepository.findByUserName("ayush@gmail.com"))
-                .thenReturn(Arrays.asList(new Tweet(1, "ayush@gmail.com", "test-tweet1", null, null, null),
-                        new Tweet(1, "ayush@gmail.com", "test-tweet2", null, null, null)));
+                .thenReturn(Arrays.asList(new Tweet(1, "ayush@gmail.com", "test-tweet1", new Date(), null, null),
+                        new Tweet(1, "ayush@gmail.com", "test-tweet2", new Date(), null, null)));
         Assertions.assertEquals(2, tweetService.getAllTweetsByUser("ayush@gmail.com").getBody().size());
     }
 
