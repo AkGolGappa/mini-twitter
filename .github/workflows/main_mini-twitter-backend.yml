@@ -49,5 +49,5 @@ jobs:
         with:
           app-name: 'mini-twitter-backend'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_3D991420486244E89A8F34E96AE09149 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_AC3B96236C26481FB2305ED534CAFB87 }}
           package: '*.jar'
