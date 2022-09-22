@@ -24,7 +24,7 @@ import lombok.Generated;
 @RequestMapping(value = "/api/v1.0/tweets")
 @RestController
 @Generated
-//@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "https://mini-twitter-frontend.azurewebsites.net")
 public class UserController {
 
 	@Autowired
